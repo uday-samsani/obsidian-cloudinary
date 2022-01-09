@@ -1,7 +1,7 @@
 {
-  "cloudName": "dakfccuv5",
-  "uploadPreset": "i9vtpaj7",
+  "comment": "illustration only",
+  "cloudName": "cloudNameHere",
+  "uploadPreset": "preset-code",
   "folder": null,
   "uploadVideo": false,
-  "maxWidth": 4096
 }
