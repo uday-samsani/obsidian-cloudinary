@@ -70,8 +70,8 @@ export default class CloudinaryUploaderSettingTab extends PluginSettingTab {
                     })
             });
                         new Setting(containerEl)
-            .setName("Upload Video")
-            .setDesc("Upload Video along with images to Cloudinary")
+            .setName("Upload Any Supported File")
+            .setDesc("Upload all supported files along with images to Cloudinary")
             .addToggle((text) => {
                 text
                     .setValue(this.plugin.settings.uploadVideo)

@@ -1427,11 +1427,11 @@ var require_follow_redirects = __commonJS((exports2, module2) => {
     var lastValue;
     for (var header in headers) {
       if (regex.test(header)) {
-        lastValue = headers[header].toString().trim();
+        lastValue = headers[header];
         delete headers[header];
       }
     }
-    return lastValue;
+    return lastValue === null || typeof lastValue === "undefined" ? void 0 : String(lastValue).trim();
   }
   function createErrorType(code, defaultMessage) {
     function CustomError(cause) {
@@ -2639,6 +2639,16 @@ var CloudinaryUploaderSettingTab = class extends import_obsidian.PluginSettingTa
         }
       });
     });
+    new import_obsidian.Setting(containerEl).setName("Upload Any Supported File").setDesc("Upload all supported files along with images to Cloudinary").addToggle((text) => {
+      text.setValue(this.plugin.settings.uploadVideo).onChange(async (value) => {
+        try {
+          this.plugin.settings.uploadVideo = value;
+          await this.plugin.saveSettings();
+        } catch (e) {
+          console.log(e);
+        }
+      });
+    });
   }
 };
 var settings_tab_default = CloudinaryUploaderSettingTab;
@@ -2647,19 +2657,30 @@ var settings_tab_default = CloudinaryUploaderSettingTab;
 var DEFAULT_SETTINGS = {
   cloudName: null,
   uploadPreset: null,
-  folder: null
+  folder: null,
+  uploadVideo: false
 };
+var goUpload = false;
 var CloudinaryUploader = class extends import_obsidian2.Plugin {
   setupPasteHandler() {
     this.registerEvent(this.app.workspace.on("editor-paste", async (evt, editor) => {
       const {files} = evt.clipboardData;
-      if (files.length == 0 && !files[0].type.startsWith("text")) {
-        editor.replaceSelection("Clipboard data is not an image\n");
-      } else if (this.settings.cloudName && this.settings.uploadPreset && files[0].type.startsWith("image")) {
+      if (!this.settings.uploadVideo) {
+        if (!files[0].type.startsWith("text") || !files[0].type.startsWith("image")) {
+          editor.replaceSelection("Clipboard data is not an image\n");
+          goUpload = false;
+        }
+        if (files[0].type.startsWith("image")) {
+          goUpload = true;
+        }
+      } else {
+        goUpload = true;
+      }
+      if (this.settings.cloudName && this.settings.uploadPreset && goUpload) {
         for (let file of files) {
           evt.preventDefault();
           const randomString = (Math.random() * 10086).toString(36).substr(0, 8);
-          const pastePlaceText = `![uploading...](${randomString})
+          const pastePlaceText = `![uploading...(larger files can take a while, be patient)](${randomString})
 `;
           editor.replaceSelection(pastePlaceText);
           const formData = new FormData();
@@ -2681,7 +2702,7 @@ var CloudinaryUploader = class extends import_obsidian2.Plugin {
         }
       } else {
         new import_obsidian2.Notice("Cloudinary Image Uploader: Please check the image hosting settings.");
-        editor.replaceSelection("Please check settings for upload\n This will also appear if file is not of image type");
+        editor.replaceSelection("Please check settings for upload\n");
       }
     }));
   }

@@ -58,8 +58,8 @@ export default class CloudinaryUploader extends Plugin {
         for (let file of files) {
           evt.preventDefault(); // Prevent default paste behaviour
 
-          const randomString = (Math.random() * 10086).toString(36).substr(0, 8)
-          const pastePlaceText = `![uploading...(videos can take a while, be patient)](${randomString})\n`
+          const randomString = (Math.random() * 10086).toString(36).substr(0, 8);
+          const pastePlaceText = `![uploading...(larger files can take a while, be patient)](${randomString})\n`
           editor.replaceSelection(pastePlaceText) // Generate random string to show on editor screen while API call completes
 
           // Cloudinary request format
@@ -91,7 +91,7 @@ export default class CloudinaryUploader extends Plugin {
       else {
       // If not image data, or empty files array
         new Notice("Cloudinary Image Uploader: Please check the image hosting settings.");
-        editor.replaceSelection("Please check settings for upload\n This will also appear if file is not of image type");
+        editor.replaceSelection("Please check settings for upload\n");
       } 
 
     }))
