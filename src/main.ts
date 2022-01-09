@@ -17,6 +17,7 @@ interface CloudinarySettings {
   cloudName: string;
   uploadPreset: string;
   folder: string;
+  uploadVideo: boolean;
   //maxWidth: number; TODO
   // enableResize: boolean; TODO
 }
@@ -26,9 +27,11 @@ const DEFAULT_SETTINGS: CloudinarySettings = {
   cloudName: null,
   uploadPreset: null,
   folder: null,
+  uploadVideo: false
   //maxWidth: 4096, TODO
   //enableResize: false, TODO later
 };
+let goUpload:boolean = false;
 export default class CloudinaryUploader extends Plugin {
   settings: CloudinarySettings;
 
@@ -39,15 +42,24 @@ export default class CloudinaryUploader extends Plugin {
   // if Files empty or does not contain image, throw error
     this.registerEvent(this.app.workspace.on('editor-paste',async (evt: ClipboardEvent, editor: Editor)=>{
       const { files } = evt.clipboardData;
-      if (files.length == 0 && !files[0].type.startsWith("text")) {
-        editor.replaceSelection("Clipboard data is not an image\n");
+      if(!this.settings.uploadVideo){
+        if (!files[0].type.startsWith("text") || !files[0].type.startsWith("image")) {
+          editor.replaceSelection("Clipboard data is not an image\n");
+          goUpload = false;
+        }
+        if(files[0].type.startsWith("image")){
+          goUpload = true;
+        }
       }
-      else if (this.settings.cloudName && this.settings.uploadPreset && files[0].type.startsWith("image")) {
+      else{
+        goUpload = true
+      }
+      if (this.settings.cloudName && this.settings.uploadPreset && goUpload) {
         for (let file of files) {
           evt.preventDefault(); // Prevent default paste behaviour
 
           const randomString = (Math.random() * 10086).toString(36).substr(0, 8)
-          const pastePlaceText = `![uploading...](${randomString})\n`
+          const pastePlaceText = `![uploading...(videos can take a while, be patient)](${randomString})\n`
           editor.replaceSelection(pastePlaceText) // Generate random string to show on editor screen while API call completes
 
           // Cloudinary request format

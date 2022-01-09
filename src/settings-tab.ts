@@ -69,5 +69,21 @@ export default class CloudinaryUploaderSettingTab extends PluginSettingTab {
                         }
                     })
             });
+                        new Setting(containerEl)
+            .setName("Upload Video")
+            .setDesc("Upload Video along with images to Cloudinary")
+            .addToggle((text) => {
+                text
+                    .setValue(this.plugin.settings.uploadVideo)
+                    .onChange(async (value) => {
+                        try {
+                            this.plugin.settings.uploadVideo = value;
+                            await this.plugin.saveSettings();
+                        }
+                        catch (e) {
+                            console.log(e)
+                        }
+                    })
+            });
     }
 }
