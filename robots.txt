@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://jordanhandy.github.io/obsidian-cloudinary-uploader/sitemap.xml.gz
+Sitemap: https://github.com/uday-samsani/obsidian-cloudinary/sitemap.xml.gz
