@@ -2,7 +2,7 @@
 import {
     Notice,
     Plugin,
-    Editor, MarkdownView, requestUrl,
+    Editor,
 } from "obsidian";
 
 // For API requests
@@ -61,6 +61,7 @@ export default class CloudinaryUploader extends Plugin {
     private handleUploadSuccess = () => {
         this.isUploading = false;
         this.statusBar.setText("☁️ Cloudinary: Uploaded ✅")
+        this.statusBar.setText("")
         setTimeout(() => {
             this.statusBar.setText("")
         }, 3000)

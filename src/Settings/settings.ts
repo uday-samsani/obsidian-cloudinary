@@ -60,7 +60,7 @@ export default class CloudinaryUploaderSettingTab extends PluginSettingTab {
         containerEl.empty();
 
         containerEl.createEl("div")
-        containerEl.createEl("h2", {text: "General Settings"});
+        containerEl.createEl("h2", {text: "General"});
         this.addCloudinaryName();
         this.addUploadContent();
         this.toggleUploadBasedOnFolder();
@@ -74,7 +74,7 @@ export default class CloudinaryUploaderSettingTab extends PluginSettingTab {
         containerEl.createEl("br")
 
         containerEl.createEl("div")
-        containerEl.createEl("h2", {text: "Transformation Settings"});
+        containerEl.createEl("h2", {text: "Transformation"});
         this.toggleFormatAuto();
         this.transformationParamsHeaders();
         this.addImageTransformParams();
@@ -219,7 +219,7 @@ export default class CloudinaryUploaderSettingTab extends PluginSettingTab {
                 const s = new Setting(this.containerEl)
                     .addSearch((cb) => {
                         new FolderSuggest(cb.inputEl);
-                        cb.setPlaceholder("Obsidian Folder")
+                        cb.setPlaceholder("Obsidian folder")
                             .setValue(uploadFolder.obsidianFolder)
                             .onChange(async (newFolder) => {
                                 if (
@@ -240,7 +240,7 @@ export default class CloudinaryUploaderSettingTab extends PluginSettingTab {
                             });
                     })
                     .addText((text) => {
-                        text.setPlaceholder("Upload Preset")
+                        text.setPlaceholder("Upload preset")
                             .setValue(uploadFolder.uploadPreset)
                             .onChange(async (newUploadPreset) => {
                                 this.plugin.settings.uploadFolders[
@@ -251,7 +251,7 @@ export default class CloudinaryUploaderSettingTab extends PluginSettingTab {
                         text.inputEl.style.width = "30%";
                     })
                     .addText((text) => {
-                        text.setPlaceholder("Upload Folder")
+                        text.setPlaceholder("Upload folder")
                             .setValue(uploadFolder.uploadFolder)
                             .onChange(async (newUploadFolder) => {
                                 this.plugin.settings.uploadFolders[
